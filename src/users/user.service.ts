@@ -36,7 +36,11 @@ export class UserService{
     }
     //  cập nhật thông tin user nhận 2 giá trị là id từ Params và data từ Body
     async updateUser(id,data): Promise<UserDto>{
-        return this.userModel.findByIdAndUpdate(id,data,{new:true})
+        let newdata = this.readOneUser(id);
+        newdata = {
+            ...data
+        }
+        return this.userModel.findByIdAndUpdate(id,newdata,{new:true})
     }
     
     //  xóa user

@@ -27,7 +27,20 @@ export class ProductService{
         return this.productModel.find({'owner':id});
     }
 
-    async searchProductWithString(string){
-        return this.productModel.find({ 'name':`%${string}%`});
+    async searchProductWithString(character){
+        console.log(character);
+        return this.productModel.find({'productname': { $regex: character}});
+    }
+
+    async updateProduct(id,data): Promise<productDto>{
+        let newdata = this.getOneProductWithId(id);
+        newdata = {
+            ...data
+        }
+        return this.productModel.findByIdAndUpdate(id,newdata,{new:true})
+    }
+
+    async deleteProduct(id){
+        return this.productModel.findByIdAndRemove(id);
     }
 }

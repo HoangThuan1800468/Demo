@@ -13,11 +13,17 @@ export class Product{
     owner:String;
 
     @Prop()
+    image:String;
+
+    @Prop()
     price:Number;
 
     @Prop()
     saleprice:Number;
 
+    @Prop({default:false})
+    status:boolean;
+    
     @Prop({default:Date.now})
     createdAt:Date;
 

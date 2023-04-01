@@ -12,6 +12,9 @@ export class productDto{
     @Expose()
     owner:String;
 
+    @Expose()
+    image:String;
+
     @IsNotEmpty()
     @Expose()
     price:Number;
@@ -19,5 +22,14 @@ export class productDto{
     @IsNotEmpty()
     @Expose()
     saleprice:Number;
+
+    @IsNotEmpty()
+    @Expose()
+    status:boolean;
+}
+export class searchDto{
+
+    @Expose()
+    character:String;
 
 }

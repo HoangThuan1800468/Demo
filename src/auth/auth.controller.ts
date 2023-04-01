@@ -8,17 +8,19 @@ export class AuthController{
         private readonly userService: UserService,
         private readonly authService: AuthService
     ){}
-
-    @Get(':name')
+    // GET
+    @Get('getUserForName/:name')
     async findUserForName(@Param('name') name:string){
         return this.userService.findUserForName(name);
     }
-    @Post('login')
-    async login(@Body() req){
-        return this.authService.validateUser(req.username,req.password);
-    }
+    
     @Get('logout/:id')
     async logout(@Param('id') id:string){
         return this.authService.logoutUser(id);
+    }
+    // POST
+    @Post('login')
+    async login(@Body() req){
+        return this.authService.validateUser(req.username,req.password);
     }
 }
