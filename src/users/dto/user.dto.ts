@@ -16,7 +16,26 @@ export class UserDto{
     @Length(10,30)
     password:String;
 
+    @IsNotEmpty()
+    @Expose()
+    @Length(6,6)
+    passwordWallet:String;
+
+    @Expose()
+    transactionHistory:[];
+
+    @Expose()
+    balanceInWallet:Number;
+
     @Expose()
     token:String;
+}
+export class walletInforDto{
+
+    @Expose()
+    balanceInWallet:Number;
+    
+    @Expose()
+    transactionHistory:[];
 
 }

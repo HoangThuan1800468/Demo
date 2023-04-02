@@ -23,7 +23,6 @@ export class productDto{
     @Expose()
     saleprice:Number;
 
-    @IsNotEmpty()
     @Expose()
     status:boolean;
 }

@@ -3,6 +3,7 @@ import { plainToClass } from "class-transformer";
 import { UserAuthGuard } from "src/auth/UserAuthGuard";
 import { UserDto } from "./dto/user.dto";
 import { UserService } from "./user.service";
+import { WalletAuthGuard } from "src/auth/WalletAuthGuard";
 
 @Controller('users')
 
@@ -22,6 +23,13 @@ export class userController{
     async getOneUser(@Param('id') id:string){
       return this.userService.readOneUser(id);
     }
+
+    @UseGuards(WalletAuthGuard)
+    @Get('getWalletUser/:id')
+    async getWalletUser(@Param('id') id:string,@Body() rq){
+      return this.userService.getWalletUser(id);
+    }
+
     // POST 
     @Post('createUser')
     async createUser(@Body() user:UserDto ){

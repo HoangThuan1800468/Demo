@@ -15,14 +15,20 @@ export class User{
     @Prop()
     password:String;
 
+    @Prop()
+    passwordWallet:String;
+
+    @Prop()
+    transactionHistory:[];
+
+    @Prop({default:0})
+    balanceInWallet:Number;
+
+    @Prop({default:""})
+    token:String;
+
     @Prop({default:false})
     admin:Boolean;
-
-    @Prop()
-    wallet:String;
-
-    @Prop()
-    token:String;
 
     @Prop({default:Date.now})
     createdAt:Date;
