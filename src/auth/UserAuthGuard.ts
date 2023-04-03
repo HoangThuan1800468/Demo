@@ -27,9 +27,6 @@ export class UserAuthGuard implements CanActivate {
       const validatetoken = await this.userService.readOneUser(payload.id);
       // token in db === token from client => is true
       if(validatetoken.token === request.body.accessToken){
-        request.userid = payload.id;
-        request.admin = payload.username;
-        request.username = payload.admin;
         return true;
       }else{
         throw new ForbiddenException('token not validate!');

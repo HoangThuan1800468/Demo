@@ -13,12 +13,11 @@ export class userController{
         private readonly userService: UserService)
     {}
     // GET
-    @UseGuards(UserAuthGuard)
     @Get('allUsers')
     readUser(){
       return this.userService.readUser();
     }
-    
+    @UseGuards(UserAuthGuard)
     @Get('getUser/:id')
     async getOneUser(@Param('id') id:string){
       return this.userService.readOneUser(id);
@@ -37,12 +36,14 @@ export class userController{
       return this.userService.createUser(newUser);
     }
     // PUT
+    @UseGuards(UserAuthGuard)
     @Put('updateUser/:id')
     async updateUser(@Param('id') id:string, @Body() updateData){
         const userupdate = plainToClass(UserDto,updateData,{excludeExtraneousValues:true});
       return this.userService.updateUser(id,userupdate)
     }
     // DELETE
+    @UseGuards(UserAuthGuard)
     @Delete('deleteUser/:id')
     async deleUser(@Param('id') id:string){
       return this.userService.deleteUser(id);

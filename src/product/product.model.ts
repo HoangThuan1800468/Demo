@@ -19,6 +19,12 @@ export class Product{
     price:Number;
 
     @Prop()
+    tradeHistory:[];
+
+    @Prop()
+    tag:[];
+
+    @Prop()
     saleprice:Number;
 
     @Prop({default:false})

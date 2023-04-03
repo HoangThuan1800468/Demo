@@ -12,19 +12,16 @@ export class UserService{
     constructor(@InjectModel('user') private readonly userModel: Model<UserDocument>){}
 
     async createUser(user: UserDto): Promise<UserDto>{
-        // 
         const saltOrRounds = 10;
-        // 
         const password = `${user.password}`;
         const passwordWallet = `${user.passwordWallet}`;
-        // 
+        // encrypt user password and wallet password
         const hashpassword =  await bcrypt.hash(password, saltOrRounds);
         const hashpasswordWallet =  await bcrypt.hash(passwordWallet, saltOrRounds);
         // 
         user.password = hashpassword;
         user.passwordWallet = hashpasswordWallet;
         // 
-        console.log(user);
         const UserNew = new this.userModel(user);
         return UserNew.save();
     }
@@ -51,25 +48,33 @@ export class UserService{
     async findUserForName(name){
         return this.userModel.findOne({"username":name});
     }
-    //  cập nhật thông tin user nhận 2 giá trị là id từ Params và data từ Body
+
     async updateUser(id,data): Promise<UserDto>{
+
+        // get data of user
         let newdata:UserDto = await this.readOneUser(id);
         const saltOrRounds = 10;
+        // if the data transactionHistory changes 
+        // then proceed to add to the end of the array in db
         if(data.transactionHistory){
             const a:any = newdata.transactionHistory;
             const b:any = data.transactionHistory;
             a.push(...b);
             console.log(a);
             data.transactionHistory = a;
-        }else if(data.password){
+        }else {}
+        // if the data changes 
+        // then proceed encrypt and to add to the end of the array in db
+        if(data.password){
             const hashpassword =  await bcrypt.hash(data.password, saltOrRounds);
             data.password = hashpassword;
-        }else if(data.passwordWallet){
+        }else {}
+        // 
+        if(data.passwordWallet){
             const hashpassword =  await bcrypt.hash(data.passwordWallet, saltOrRounds);
             data.passwordWallet = hashpassword;
-        }else{
-            
-        }
+        }else {}
+        // 
         newdata = {
             ...data
         }

@@ -30,14 +30,7 @@ export class AuthService{
         }
         return 'Username or password is not validate';
     }
-    async validateWallet(pass_rq: string, pass_db: string){
-        const password = `${pass_rq}`;
-        const oldPassword = `${pass_db}`;
-
-        const validPassword = await bcrypt.compare(password,oldPassword);
-
-        return validPassword;
-    }
+    
     async logoutUser(id: string): Promise<any> {
         const data = {
             token:'',

@@ -7,22 +7,23 @@ import {
   } from '@nestjs/common';
   import { JwtService } from '@nestjs/jwt';
   import { UserService } from 'src/users/user.service';
-  import { RequestWithAuth } from './types';
+  import { RequestWithAuthProduct } from './types';
   import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
+import { ProductService } from 'src/product/product.service';
 
   @Injectable()
-  export class WalletAuthGuard implements CanActivate {
-    private readonly logger = new Logger(WalletAuthGuard.name);
+  export class ProductAuthGuard implements CanActivate {
+    private readonly logger = new Logger(ProductAuthGuard.name);
     constructor(
       private readonly jwtService: JwtService,
       private readonly userService: UserService,
-    //   private readonly authService: AuthService,
+      private readonly productService: ProductService,
     ) {}
   
     async canActivate(context: ExecutionContext): Promise<boolean> {
       // get accesstoken from client 
-      const request: RequestWithAuth = context.switchToHttp().getRequest();
+      const request: RequestWithAuthProduct = context.switchToHttp().getRequest();
       
       try{
         // verify token
@@ -30,11 +31,10 @@ import { AuthService } from './auth.service';
         const payload = this.jwtService.verify(request.body.accessToken);
         // get token from db = id in token 
         const validatetoken = await this.userService.readOneUser(payload.id);
-        // check password wallet
-        const pass_db = `${validatetoken.passwordWallet}`;
-        const validPasswordWallet = await bcrypt.compare(request.body.passwordWallet,pass_db);
-        // token in db === token from client => is true and validate password wallet == true
-        if(validatetoken.token === request.body.accessToken&&validPasswordWallet){
+        // get data product
+        const dataProduct = await this.productService.getOneProductWithId(request.body.idProduct);
+        // token in db === token from client => is true and validate id product owner === id user in token == true
+        if(validatetoken.token === request.body.accessToken && dataProduct.owner === payload.id){
           return true;
         }else{
           throw new ForbiddenException('token not validate!');

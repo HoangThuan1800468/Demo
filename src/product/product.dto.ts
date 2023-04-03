@@ -15,6 +15,12 @@ export class productDto{
     @Expose()
     image:String;
 
+    @Expose()
+    tradeHistory:[];
+
+    @Expose()
+    tag:[];
+
     @IsNotEmpty()
     @Expose()
     price:Number;

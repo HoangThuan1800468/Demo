@@ -27,13 +27,42 @@ export class ProductService{
         return this.productModel.find({'owner':id});
     }
 
+    async getProductsWithTags(tag){
+        return this.productModel.aggregate(
+            [ 
+                { $match : { tag : tag } } ,
+                { $project: { 
+                    image: 1, 
+                    productname: 1,
+                    status:1
+                }}
+            ]
+        );
+    }
+
     async searchProductWithString(character){
         console.log(character);
         return this.productModel.find({'productname': { $regex: character}});
     }
 
     async updateProduct(id,data): Promise<productDto>{
-        let newdata = this.getOneProductWithId(id);
+        // get data product by id
+        let newdata:productDto = await this.getOneProductWithId(id);
+        // if trade history change then proceed to add to the end of the array in db
+        if(data.tradeHistory){
+            const a : any = newdata.tradeHistory;
+            const b : any = data.tradeHistory;
+            a.push(...b);
+            data.tradeHistory = a;
+        }else {}
+        // if tag change then proceed to add to the end of the array in db
+        if(data.tag){
+            const a : any = newdata.tag;
+            const b : any = data.tag;
+            a.push(...b);
+            data.tag = a;
+        }
+        else{}
         newdata = {
             ...data
         }
