@@ -17,24 +17,24 @@ export class tradingOrderService{
     ){}
     
     async getAllOrder(){
-        return this.tradingOrderModel.find();
+        return await this.tradingOrderModel.find();
     }
 
     async getOneOrder(id:string):Promise<tradingOrdertDto>{
-        return this.tradingOrderModel.findById(id);
+        return await this.tradingOrderModel.findById(id);
     }
 
     async createOrder(order: tradingOrdertDto): Promise<tradingOrdertDto>{
         const newOrder = new this.tradingOrderModel(order);
-        return newOrder.save();
+        return await newOrder.save();
     }
 
     async updateOrder(idOrder: string,data): Promise<tradingOrdertDto>{
-        return this.tradingOrderModel.findByIdAndUpdate(idOrder,data,{new:true});
+        return await this.tradingOrderModel.findByIdAndUpdate(idOrder,data,{new:true});
     }
 
     async deleteOrder(id){
-        return this.tradingOrderModel.findByIdAndRemove(id);
+        return await this.tradingOrderModel.findByIdAndRemove(id);
     }
 
     async handleOrder(idOrder: string){
@@ -63,7 +63,7 @@ export class tradingOrderService{
                     idOrder
                 ]
             }
-            this.userService.updateUser(inforOrder.idBuyer,jsonBuyer);
+            await this.userService.updateUser(inforOrder.idBuyer,jsonBuyer);
             // SELLER handle
             // Same as handling on buyer
             const last_balanceInWallet_seller:any = parseInt(balanceInWallet_seller) + parseInt(price);
@@ -74,18 +74,18 @@ export class tradingOrderService{
                     idOrder
                 ]
             }
-            this.userService.updateUser(inforOrder.idSeller,jsonSeller);
+            await this.userService.updateUser(inforOrder.idSeller,jsonSeller);
             // PRODUCT
             const jsonProduct = {
                 "owner":inforOrder.idBuyer,
                 "tradeHistory":idOrder
             }
-            this.productService.updateProduct(inforOrder.idProduct,jsonProduct);
+            await this.productService.updateProduct(inforOrder.idProduct,jsonProduct);
             // TRADING_ORDER
             const jsonTradingOrder = {
                 "statusOrder":true
             };
-            this.updateOrder(idOrder,jsonTradingOrder);
+            await this.updateOrder(idOrder,jsonTradingOrder);
             // done!
             return `Order Id: ${idOrder}, successful transaction`
         }

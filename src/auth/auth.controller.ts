@@ -11,16 +11,16 @@ export class AuthController{
     // GET
     @Get('getUserForName/:name')
     async findUserForName(@Param('name') name:string){
-        return this.userService.findUserForName(name);
+        return await this.userService.findUserForName(name);
     }
     
     @Get('logout/:id')
     async logout(@Param('id') id:string){
-        return this.authService.logoutUser(id);
+        return await this.authService.logoutUser(id);
     }
     // POST
     @Post('login')
     async login(@Body() req){
-        return this.authService.validateUser(req.username,req.password);
+        return await this.authService.validateUser(req.username,req.password);
     }
 }

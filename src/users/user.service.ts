@@ -23,7 +23,7 @@ export class UserService{
         user.passwordWallet = hashpasswordWallet;
         // 
         const UserNew = new this.userModel(user);
-        return UserNew.save();
+        return await UserNew.save();
     }
     // Lấy thông tin wallet
     async getWalletUser(id){
@@ -36,17 +36,17 @@ export class UserService{
     }
     // lấy toàn bộ thông tin user
     async readUser(){
-        return this.userModel.find()
+        return await this.userModel.find()
         .then((user) => {return user})
         .catch((err) => console.log(err))
     }
     //readOneUser bang id
     async readOneUser(id){
-        return this.userModel.findById(id);
+        return await this.userModel.findById(id);
     }
     //
     async findUserForName(name){
-        return this.userModel.findOne({"username":name});
+        return await this.userModel.findOne({"username":name});
     }
 
     async updateUser(id,data): Promise<UserDto>{
@@ -60,7 +60,6 @@ export class UserService{
             const a:any = newdata.transactionHistory;
             const b:any = data.transactionHistory;
             a.push(...b);
-            console.log(a);
             data.transactionHistory = a;
         }else {}
         // if the data changes 
@@ -75,15 +74,15 @@ export class UserService{
             data.passwordWallet = hashpassword;
         }else {}
         // 
-        newdata = {
+        newdata = await {
             ...data
         }
-        return this.userModel.findByIdAndUpdate(id,newdata,{new:true})
+        return await this.userModel.findByIdAndUpdate(id,newdata,{new:true})
     }
     
     //  xóa user
     async deleteUser(id){
-        return this.userModel.findByIdAndRemove(id);
+        return await this.userModel.findByIdAndRemove(id);
     }
 
 }

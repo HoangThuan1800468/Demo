@@ -23,7 +23,7 @@ export class AuthService{
             const data = {
                 token: token
             }
-            this.userService.updateUser(user._id,data);
+            await this.userService.updateUser(user._id,data);
             return {
                 access_token: token,
             }

@@ -14,39 +14,39 @@ export class userController{
     {}
     // GET
     @Get('allUsers')
-    readUser(){
-      return this.userService.readUser();
+    async readUser(){
+      return await this.userService.readUser();
     }
     @UseGuards(UserAuthGuard)
     @Get('getUser/:id')
     async getOneUser(@Param('id') id:string){
-      return this.userService.readOneUser(id);
+      return await this.userService.readOneUser(id);
     }
 
     @UseGuards(WalletAuthGuard)
     @Get('getWalletUser/:id')
     async getWalletUser(@Param('id') id:string,@Body() rq){
-      return this.userService.getWalletUser(id);
+      return await this.userService.getWalletUser(id);
     }
 
     // POST 
     @Post('createUser')
     async createUser(@Body() user:UserDto ){
         const newUser = plainToClass(UserDto,user,{excludeExtraneousValues:true});
-      return this.userService.createUser(newUser);
+      return await this.userService.createUser(newUser);
     }
     // PUT
     @UseGuards(UserAuthGuard)
     @Put('updateUser/:id')
     async updateUser(@Param('id') id:string, @Body() updateData){
         const userupdate = plainToClass(UserDto,updateData,{excludeExtraneousValues:true});
-      return this.userService.updateUser(id,userupdate)
+      return await this.userService.updateUser(id,userupdate)
     }
     // DELETE
     @UseGuards(UserAuthGuard)
     @Delete('deleteUser/:id')
     async deleUser(@Param('id') id:string){
-      return this.userService.deleteUser(id);
+      return await this.userService.deleteUser(id);
     }
 
 }

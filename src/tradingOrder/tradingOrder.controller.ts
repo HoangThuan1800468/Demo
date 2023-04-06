@@ -15,25 +15,25 @@ export class tradingOrderController{
     // GET
     @Get('getAllOrder')
     async getAllOrder(){
-      return this.tradingOrderService.getAllOrder();
+      return await this.tradingOrderService.getAllOrder();
     }
     // POST
     @UseGuards(UserAuthGuard)
     @Post('createOrder')
     async createOrder(@Body() order:tradingOrdertDto ){
         const newOrder = plainToClass(tradingOrdertDto,order,{excludeExtraneousValues:true});
-      return this.tradingOrderService.createOrder(newOrder);
+      return await this.tradingOrderService.createOrder(newOrder);
     }
     // PUT
     @UseGuards(WalletAuthGuard)
     @Put('handleOrder/:idOrder')
     async handleOrder(@Param('idOrder') id:string){
-      return this.tradingOrderService.handleOrder(id)
+      return await this.tradingOrderService.handleOrder(id)
     }
     // DELETE
     @UseGuards(OrderAuthGuard)
     @Delete('deleteOrder/:id')
     async deleteOrder(@Param('id') id:string){
-      return this.tradingOrderService.deleteOrder(id);
+      return await this.tradingOrderService.deleteOrder(id);
     }
 }

@@ -12,23 +12,23 @@ export class ProductService{
 
     async createProduct(product: productDto): Promise<productDto>{
         const newproduct = new this.productModel(product);
-        return newproduct.save();
+        return await newproduct.save();
     }
 
     async getAllProduct(){
-        return this.productModel.find();
+        return await this.productModel.find();
     }
 
     async getOneProductWithId(id){
-        return this.productModel.findById(id);
+        return await this.productModel.findById(id);
     }
 
     async getProductOfOwner(id){
-        return this.productModel.find({'owner':id});
+        return await this.productModel.find({'owner':id});
     }
 
     async getProductsWithTags(tag){
-        return this.productModel.aggregate(
+        return await this.productModel.aggregate(
             [ 
                 { $match : { tag : tag } } ,
                 { $project: { 
@@ -41,8 +41,7 @@ export class ProductService{
     }
 
     async searchProductWithString(character){
-        console.log(character);
-        return this.productModel.find({'productname': { $regex: character}});
+        return await this.productModel.find({'productname': { $regex: character}});
     }
 
     async updateProduct(id,data): Promise<productDto>{
@@ -63,13 +62,13 @@ export class ProductService{
             data.tag = a;
         }
         else{}
-        newdata = {
+        newdata = await {
             ...data
         }
-        return this.productModel.findByIdAndUpdate(id,newdata,{new:true})
+        return await this.productModel.findByIdAndUpdate(id,newdata,{new:true})
     }
 
     async deleteProduct(id){
-        return this.productModel.findByIdAndRemove(id);
+        return await this.productModel.findByIdAndRemove(id);
     }
 }
