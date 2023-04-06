@@ -42,10 +42,10 @@ export class UserService{
     }
     //readOneUser bang id
     async readOneUser(id){
-        return await this.userModel.findById(id);
+        return await this.userModel.findById(id)
     }
     //
-    async findUserForName(name){
+    async findUserFromName(name){
         return await this.userModel.findOne({"username":name});
     }
 

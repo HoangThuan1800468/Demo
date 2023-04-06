@@ -1,11 +1,11 @@
-import { Body,Param,Inject, Controller, Get, Post, ValidationPipe, Put, Delete, UseGuards } from "@nestjs/common";
+import { Body,Param,Inject, Controller, Get, Post, ValidationPipe, Put, Delete, UseGuards, ForbiddenException } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
 import { tradingOrderService } from "./tradingOrder.service";
 import { tradingOrdertDto } from "./tradingOrder.dto";
-import { WalletAuthGuard } from "src/auth/WalletAuthGuard";
-import { UserAuthGuard } from "src/auth/UserAuthGuard";
-import { ProductAuthGuard } from "src/auth/ProductAuthGuard";
-import { OrderAuthGuard } from "src/auth/OrderAuthGuard";
+import { ValidateToken_Guard } from "src/auth/Guards/ValidateToken_Guard";
+import { CheckBuyerOfOrder } from "src/auth/Guards/TradingOrderGuards/CheckBuyerOfOrder";
+import { WalletOfUserGuard } from "src/auth/Guards/UserGuards/WalletOfUserGuard";
+import { CheckStatusOrder } from "src/auth/Guards/TradingOrderGuards/CheckStatusOrder";
 @Controller('tradingOrder')
 
 export class tradingOrderController{
@@ -18,23 +18,37 @@ export class tradingOrderController{
       return await this.tradingOrderService.getAllOrder();
     }
     // POST
-    @UseGuards(UserAuthGuard)
+    @UseGuards(ValidateToken_Guard)
     @Post('createOrder')
     async createOrder(@Body() order:tradingOrdertDto ){
         const newOrder = plainToClass(tradingOrdertDto,order,{excludeExtraneousValues:true});
       return await this.tradingOrderService.createOrder(newOrder);
     }
     // PUT
-    @UseGuards(WalletAuthGuard)
+    @UseGuards(WalletOfUserGuard)
+    @UseGuards(CheckStatusOrder)
+    @UseGuards(CheckBuyerOfOrder)
+    @UseGuards(ValidateToken_Guard)
     @Put('handleOrder/:idOrder')
-    async handleOrder(@Param('idOrder') id:string){
-      return await this.tradingOrderService.handleOrder(id)
+    async handleOrder(@Param('idOrder') idOrder:string){
+      try{
+        return await this.tradingOrderService.handleOrder(idOrder)
+      }catch{
+        throw new ForbiddenException('id order not in db');
+      }
+      
     }
 
     // DELETE
-    @UseGuards(OrderAuthGuard)
+    @UseGuards(CheckBuyerOfOrder)
+    @UseGuards(ValidateToken_Guard)
     @Delete('deleteOrder/:id')
     async deleteOrder(@Param('id') id:string){
-      return await this.tradingOrderService.deleteOrder(id);
+      try{
+        return await this.tradingOrderService.deleteOrder(id);
+      }catch{
+        throw new ForbiddenException('id order not in db');
+      }
+      
     }
 }

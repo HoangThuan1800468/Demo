@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as bcrypt from 'bcrypt';
 import { ProductDocument } from "./product.model";
-import { productDto } from "./product.dto";
+import { productDto, searchDto } from "./product.dto";
 
 
 @Injectable()

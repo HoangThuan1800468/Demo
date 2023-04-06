@@ -1,9 +1,9 @@
-import { Body,Param,Inject, Controller, Get, Post, ValidationPipe, Put, Delete, UseGuards } from "@nestjs/common";
+import { Body,Param,Inject, Controller, Get, Post, ValidationPipe, Put, Delete, UseGuards, ForbiddenException } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
 import { productDto, searchDto } from "./product.dto";
 import { ProductService } from "./product.service";
-import { ProductAuthGuard } from "src/auth/ProductAuthGuard";
-import { UserAuthGuard } from "src/auth/UserAuthGuard";
+import { ValidateToken_Guard } from "src/auth/Guards/ValidateToken_Guard";
+import { CheckOwnerOfProductGuard } from "src/auth/Guards/ProductGuards/CheckOwnerOfProductGuard";
 
 @Controller('product')
 
@@ -16,22 +16,38 @@ export class ProductController{
     async getAllProduct(){
       return await this.productService.getAllProduct();
     }
-
-    @UseGuards(UserAuthGuard)
+    
+    @UseGuards(CheckOwnerOfProductGuard)
+    @UseGuards(ValidateToken_Guard)
     @Get('getOneProduct/:id')
     async getOneProductWithId(@Param('id') id:string){
-      return await this.productService.getOneProductWithId(id);
+      try{
+        return await this.productService.getOneProductWithId(id);
+      }catch{
+        throw new ForbiddenException('Not tag of product in db');
+      }
+      
     }
 
     @Get('getProductsWithTags/:tag')
     async getProductsWithTags(@Param('tag') tag:string){
-      return await this.productService.getProductsWithTags(tag);
+      try{
+        return await this.productService.getProductsWithTags(tag);
+      }catch{
+        throw new ForbiddenException('Not tag of product in db');
+      }
+      
     }
 
-    @UseGuards(UserAuthGuard)
+    @UseGuards(ValidateToken_Guard)
     @Get('getProductOfOwner/:id')
     async getProductOfOwner(@Param('id') id:string){
-      return await this.productService.getProductOfOwner(id);
+      try{
+        return await this.productService.getProductOfOwner(id);
+      }catch{
+        throw new ForbiddenException('Product id not in db');
+      }
+      
     }
 
     @Get('searchProducts')
@@ -40,23 +56,35 @@ export class ProductController{
       return await this.productService.searchProductWithString(keysearch.character);
     }
     // POST
-    @UseGuards(UserAuthGuard)
+    @UseGuards(ValidateToken_Guard)
     @Post('createProduct')
     async createProduct(@Body() product:productDto ){
         const newproduct = plainToClass(productDto,product,{excludeExtraneousValues:true});
       return await this.productService.createProduct(newproduct);
     }
     // PUT
-    @UseGuards(ProductAuthGuard)
+    
+    @UseGuards(CheckOwnerOfProductGuard)
+    @UseGuards(ValidateToken_Guard)
     @Put('updateProduct/:id')
     async updateProduct(@Param('id') id:string, @Body() updateData){
         const productupdate = plainToClass(productDto,updateData,{excludeExtraneousValues:true});
-      return await this.productService.updateProduct(id,productupdate);
+        try{
+          return await this.productService.updateProduct(id,productupdate);
+        }catch{
+          throw new ForbiddenException('Product id not in db');
+        }
     }
     // DELETE
-    @UseGuards(ProductAuthGuard)
+    @UseGuards(CheckOwnerOfProductGuard)
+    @UseGuards(ValidateToken_Guard)
     @Delete('deleteProduct/:id')
     async deleProduct(@Param('id') id:string){
-      return await this.productService.deleteProduct(id);
+      try{
+        return await this.productService.deleteProduct(id);
+      }catch{
+        throw new ForbiddenException('Product id not in db');
+      }
+      
     }
 }

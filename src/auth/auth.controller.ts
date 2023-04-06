@@ -9,9 +9,9 @@ export class AuthController{
         private readonly authService: AuthService
     ){}
     // GET
-    @Get('getUserForName/:name')
-    async findUserForName(@Param('name') name:string){
-        return await this.userService.findUserForName(name);
+    @Get('getUserFromName/:name')
+    async findUserFromName(@Param('name') name:string){
+        return await this.userService.findUserFromName(name);
     }
     
     @Get('logout/:id')

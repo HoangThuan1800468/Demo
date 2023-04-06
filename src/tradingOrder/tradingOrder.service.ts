@@ -98,7 +98,7 @@ export class tradingOrderService{
             }
             
         }catch{
-            return `Order Id: ${idOrder}, not valid in program`
+            return `Order Id: ${idOrder}, id not valid in program`;
         }
     }
 }
