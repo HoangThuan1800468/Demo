@@ -23,25 +23,29 @@ import { AuthService } from './auth.service';
     async canActivate(context: ExecutionContext): Promise<boolean> {
       // get accesstoken from client 
       const request: RequestWithAuth = context.switchToHttp().getRequest();
-      
-      try{
-        // verify token
-        
-        const payload = this.jwtService.verify(request.body.accessToken);
-        // get token from db = id in token 
-        const validatetoken = await this.userService.readOneUser(payload.id);
-        // check password wallet
-        const pass_db = `${validatetoken.passwordWallet}`;
-        const validPasswordWallet = await bcrypt.compare(request.body.passwordWallet,pass_db);
-        // token in db === token from client => is true and validate password wallet == true
-        if(validatetoken.token === request.body.accessToken&&validPasswordWallet){
-          return true;
-        }else{
-          throw new ForbiddenException('token not validate!');
+      if(!request.body.accessToken){
+        throw new ForbiddenException('dont have token of user!');
+      }else{
+        try{
+          // verify token
+          
+          const payload = this.jwtService.verify(request.body.accessToken);
+          // get token from db = id in token 
+          const validatetoken = await this.userService.readOneUser(payload.id);
+          // check password wallet
+          const pass_db = `${validatetoken.passwordWallet}`;
+          const validPasswordWallet = await bcrypt.compare(request.body.passwordWallet,pass_db);
+          // token in db === token from client => is true and validate password wallet == true
+          if(validatetoken.token === request.body.accessToken&&validPasswordWallet){
+            return true;
+          }else{
+            throw new ForbiddenException('token not validate!');
+          }
+        }catch{
+          throw new ForbiddenException('token user or password wallet not validate!');
         }
-      }catch{
-        throw new ForbiddenException('not token!');
       }
+      
         
           
     }

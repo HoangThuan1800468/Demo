@@ -30,6 +30,7 @@ export class tradingOrderController{
     async handleOrder(@Param('idOrder') id:string){
       return await this.tradingOrderService.handleOrder(id)
     }
+
     // DELETE
     @UseGuards(OrderAuthGuard)
     @Delete('deleteOrder/:id')
