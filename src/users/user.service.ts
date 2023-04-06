@@ -74,6 +74,7 @@ export class UserService{
             data.passwordWallet = hashpassword;
         }else {}
         // 
+        data.updatedAt = Date.now();
         newdata = await {
             ...data
         }

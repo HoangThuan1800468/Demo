@@ -31,6 +31,9 @@ export class productDto{
 
     @Expose()
     status:boolean;
+
+    @Expose()
+    updatedAt:Date;
 }
 export class searchDto{
 

@@ -23,4 +23,7 @@ export class tradingOrdertDto{
 
     @Expose()
     statusOrder:boolean;
+
+    @Expose()
+    updatedAt:Date;
 }

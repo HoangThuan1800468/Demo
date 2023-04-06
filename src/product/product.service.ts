@@ -62,6 +62,7 @@ export class ProductService{
             data.tag = a;
         }
         else{}
+        data.updatedAt = Date.now();
         newdata = await {
             ...data
         }

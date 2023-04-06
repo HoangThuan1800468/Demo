@@ -29,6 +29,9 @@ export class UserDto{
 
     @Expose()
     token:String;
+
+    @Expose()
+    updatedAt:Date;
 }
 export class walletInforDto{
 
