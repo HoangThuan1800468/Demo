@@ -26,7 +26,8 @@ export class AuthService{
             await this.userService.updateUser(user._id,data);
             return {
                 access_token: token,
-            }
+                id_user:user._id,
+            };
         }
         return 'Username or password is not validate';
     }

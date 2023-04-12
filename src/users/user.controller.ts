@@ -22,17 +22,6 @@ export class userController{
 
     @UseGuards(ValidateToken_Guard)
     @UseGuards(CheckUserOfUpdateUser)
-    @Get('getUser/:id')
-    async getOneUser(@Param('id') id:string){
-      try{
-        return await this.userService.readOneUser(id)
-      }catch{
-        throw new ForbiddenException('User id not had');
-      }
-    }
-
-    @UseGuards(ValidateToken_Guard)
-    @UseGuards(CheckUserOfUpdateUser)
     @UseGuards(WalletOfUserGuard)
     @Get('getWalletUser/:id')
     async getWalletUser(@Param('id') id:string,@Body() rq){
@@ -50,7 +39,16 @@ export class userController{
         const newUser = plainToClass(UserDto,user,{excludeExtraneousValues:true});
       return await this.userService.createUser(newUser);
     }
-    
+    @UseGuards(ValidateToken_Guard)
+    @UseGuards(CheckUserOfUpdateUser)
+    @Post('getUser/:id')
+    async getOneUser(@Param('id') id:string){
+      try{
+        return await this.userService.readOneUser(id)
+      }catch{
+        throw new ForbiddenException('User id not had');
+      }
+    }
     // PUT
     @UseGuards(ValidateToken_Guard)
     @UseGuards(CheckUserOfUpdateUser)

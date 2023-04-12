@@ -39,8 +39,16 @@ export class ProductController{
       
     }
 
+    
+
+    @Get('searchProducts')
+    async searchProductWithString(@Body() rq:searchDto){
+      const keysearch = plainToClass(searchDto,rq,{excludeExtraneousValues:true});
+      return await this.productService.searchProductWithString(keysearch.character);
+    }
+    // POST
     @UseGuards(ValidateToken_Guard)
-    @Get('getProductOfOwner/:id')
+    @Post('getProductOfOwner/:id')
     async getProductOfOwner(@Param('id') id:string){
       try{
         return await this.productService.getProductOfOwner(id);
@@ -49,13 +57,7 @@ export class ProductController{
       }
       
     }
-
-    @Get('searchProducts')
-    async searchProductWithString(@Body() rq:searchDto){
-      const keysearch = plainToClass(searchDto,rq,{excludeExtraneousValues:true});
-      return await this.productService.searchProductWithString(keysearch.character);
-    }
-    // POST
+    
     @UseGuards(ValidateToken_Guard)
     @Post('createProduct')
     async createProduct(@Body() product:productDto ){

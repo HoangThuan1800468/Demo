@@ -27,3 +27,9 @@ export type WalletPayload = {
   walletPassword:string;
 };
 export type RequestWithWalletPayload = Request & WalletPayload;
+// resLogin 
+export type resLoginPayload = {
+  access_token:string;
+  id_user:string;
+};
+export type RequestWithresLoginPayload = Request & resLoginPayload;
