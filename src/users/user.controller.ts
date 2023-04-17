@@ -5,6 +5,7 @@ import { UserService } from "./user.service";
 import { ValidateToken_Guard } from "src/auth/Guards/ValidateToken_Guard";
 import { CheckUserOfUpdateUser } from "src/auth/Guards/UserGuards/CheckUserOfUpdateUser";
 import { WalletOfUserGuard } from "src/auth/Guards/UserGuards/WalletOfUserGuard";
+import { CheckUserCreateNewUser } from "src/auth/Guards/UserGuards/CheckUserCreateNewUser";
 
 @Controller('users')
 
@@ -20,10 +21,13 @@ export class userController{
       return await this.userService.readUser();
     }
 
+    
+
+    // POST 
     @UseGuards(ValidateToken_Guard)
     @UseGuards(CheckUserOfUpdateUser)
     @UseGuards(WalletOfUserGuard)
-    @Get('getWalletUser/:id')
+    @Post('getWalletUser/:id')
     async getWalletUser(@Param('id') id:string,@Body() rq){
       try{
         return await this.userService.getWalletUser(id);
@@ -32,13 +36,13 @@ export class userController{
       }
     }
 
-    // POST 
-    @UseGuards(ValidateToken_Guard)
+    @UseGuards(CheckUserCreateNewUser)
     @Post('createUser')
     async createUser(@Body() user:UserDto ){
         const newUser = plainToClass(UserDto,user,{excludeExtraneousValues:true});
       return await this.userService.createUser(newUser);
     }
+    
     @UseGuards(ValidateToken_Guard)
     @UseGuards(CheckUserOfUpdateUser)
     @Post('getUser/:id')

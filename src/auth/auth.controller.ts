@@ -23,4 +23,8 @@ export class AuthController{
     async login(@Body() req){
         return await this.authService.validateUser(req.username,req.password);
     }
+    @Post('checkPassword')
+    async checkPassword(@Body() req){
+        return await this.authService.checkPassword(req.username,req.password);
+    }
 }

@@ -7,6 +7,7 @@ import { UserService } from "./user.service";
 import { ValidateToken_Guard } from "src/auth/Guards/ValidateToken_Guard";
 import { CheckUserOfUpdateUser } from "src/auth/Guards/UserGuards/CheckUserOfUpdateUser";
 import { WalletOfUserGuard } from "src/auth/Guards/UserGuards/WalletOfUserGuard";
+import { CheckUserCreateNewUser } from "src/auth/Guards/UserGuards/CheckUserCreateNewUser";
 
 @Module({
     imports:[jwtModule,
@@ -17,7 +18,8 @@ import { WalletOfUserGuard } from "src/auth/Guards/UserGuards/WalletOfUserGuard"
         UserService,
         ValidateToken_Guard,
         CheckUserOfUpdateUser,
-        WalletOfUserGuard
+        WalletOfUserGuard,
+        CheckUserCreateNewUser
     ],
     exports:[UserService],
 })

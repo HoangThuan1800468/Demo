@@ -31,7 +31,27 @@ export class AuthService{
         }
         return 'Username or password is not validate';
     }
-    
+    async checkPassword(username: string, pass: string): Promise<any> {
+        const user = await this.userService.findUserFromName(username);
+
+        const password = `${pass}`;
+        const oldPassword = `${user.password}`;
+
+        const validPassword = await bcrypt.compare(password,oldPassword);
+
+        if (user && validPassword) {
+            const auth:boolean = true;
+            return {
+                "checkPassword": auth
+            };
+        }else{
+            const auth:boolean = false;
+            return {
+                "checkPassword": auth
+            };
+        }
+        
+    }
     async logoutUser(id: string): Promise<any> {
         const data = {
             token:'',

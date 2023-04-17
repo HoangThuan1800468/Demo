@@ -17,8 +17,6 @@ export class ProductController{
       return await this.productService.getAllProduct();
     }
     
-    @UseGuards(CheckOwnerOfProductGuard)
-    @UseGuards(ValidateToken_Guard)
     @Get('getOneProduct/:id')
     async getOneProductWithId(@Param('id') id:string){
       try{
