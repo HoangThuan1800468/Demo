@@ -54,14 +54,18 @@ export class ProductService{
             a.push(...b);
             data.tradeHistory = a;
         }else {}
-        // if tag change then proceed to add to the end of the array in db
-        if(data.tag){
-            const a : any = newdata.tag;
-            const b : any = data.tag;
-            a.push(...b);
-            data.tag = a;
-        }
-        else{}
+        // // if tag change then proceed to add to the end of the array in db
+        // if(data.tag){
+        //     if(data.tag === "unknown"){
+                
+        //     }else{
+        //         const a : any = newdata.tag;
+        //         const b : any = data.tag;
+        //         a.push(...b);
+        //         data.tag = a;
+        //     }
+        // }
+        // else{}
         data.updatedAt = Date.now();
         newdata = await {
             ...data

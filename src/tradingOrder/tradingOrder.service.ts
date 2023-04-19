@@ -85,6 +85,7 @@ export class tradingOrderService{
                     const jsonProduct = {
                         "owner":inforOrder.idBuyer,
                         "tradeHistory":[idOrder],
+                        "status":false
                     }
                     await this.productService.updateProduct(inforOrder.idProduct,jsonProduct);
                     // TRADING_ORDER

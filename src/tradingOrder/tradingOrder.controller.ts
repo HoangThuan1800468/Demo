@@ -24,6 +24,14 @@ export class tradingOrderController{
         const newOrder = plainToClass(tradingOrdertDto,order,{excludeExtraneousValues:true});
       return await this.tradingOrderService.createOrder(newOrder);
     }
+
+    @UseGuards(CheckBuyerOfOrder)
+    @UseGuards(ValidateToken_Guard)
+    @Get('getOneOrder')
+    async getOneOrder(@Param('idOrder') idOrder:string){
+      return await this.tradingOrderService.getOneOrder(idOrder);
+    }
+
     // PUT
     @UseGuards(WalletOfUserGuard)
     @UseGuards(CheckStatusOrder)
@@ -40,8 +48,6 @@ export class tradingOrderController{
     }
 
     // DELETE
-    @UseGuards(CheckBuyerOfOrder)
-    @UseGuards(ValidateToken_Guard)
     @Delete('deleteOrder/:id')
     async deleteOrder(@Param('id') id:string){
       try{
