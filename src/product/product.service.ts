@@ -30,12 +30,7 @@ export class ProductService{
     async getProductsWithTags(tag){
         return await this.productModel.aggregate(
             [ 
-                { $match : { tag : tag } } ,
-                { $project: { 
-                    image: 1, 
-                    productname: 1,
-                    status:1
-                }}
+                { $match : { tag : tag } } 
             ]
         );
     }

@@ -17,19 +17,16 @@ export class tradingOrderController{
     async getAllOrder(){
       return await this.tradingOrderService.getAllOrder();
     }
+    @Get('getOneOrder/:idOrder')
+    async getOneOrder(@Param('idOrder') idOrder:string){
+      return await this.tradingOrderService.getOneOrder(idOrder);
+    }
     // POST
     @UseGuards(ValidateToken_Guard)
     @Post('createOrder')
     async createOrder(@Body() order:tradingOrdertDto ){
         const newOrder = plainToClass(tradingOrdertDto,order,{excludeExtraneousValues:true});
       return await this.tradingOrderService.createOrder(newOrder);
-    }
-
-    @UseGuards(CheckBuyerOfOrder)
-    @UseGuards(ValidateToken_Guard)
-    @Get('getOneOrder')
-    async getOneOrder(@Param('idOrder') idOrder:string){
-      return await this.tradingOrderService.getOneOrder(idOrder);
     }
 
     // PUT

@@ -39,10 +39,13 @@ export class ProductController{
 
     
 
-    @Get('searchProducts')
-    async searchProductWithString(@Body() rq:searchDto){
-      const keysearch = plainToClass(searchDto,rq,{excludeExtraneousValues:true});
-      return await this.productService.searchProductWithString(keysearch.character);
+    @Get('searchProducts/:string')
+    async searchProductWithString(@Param('string') string:string){
+      try{
+      return await this.productService.searchProductWithString(string);
+    }catch{
+      throw new ForbiddenException('Not name of product in db');
+    }
     }
     // POST
     @UseGuards(ValidateToken_Guard)
